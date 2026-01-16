@@ -4,10 +4,11 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Program",
-			"program": "${workspaceFolder}/dist/float.js",
-			"preLaunchTask": "tsc",
-			"outFiles": ["${workspaceFolder}/dist/**/*.js"]
+			"name": "Launch Program (tsx)",
+			"program": "${workspaceFolder}/src/float.ts",
+			"skipFiles": ["<node_internals>/**"],
+			"runtimeArgs": ["--import", "tsx"],
+			"console": "integratedTerminal"
 		}
 	]
 }
