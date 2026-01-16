@@ -73,7 +73,7 @@ process.on("SIGTERM", () => process.exit(143));
 			console.log(
 				chalk`There is a ${diff(latest.version, DownloaderVersion)} update available! ${DownloaderVersion} > ${
 					latest.version
-				}.\nHead to {cyanBright https://github.com/Inrixia/Floatplane-Downloader/releases} to update!\n`,
+				}.\nHead to {cyanBright https://github.com/Inrixia/Floatplane-Downloader/releases} to update!\n`
 			);
 	}
 
@@ -98,7 +98,7 @@ process.on("SIGTERM", () => process.exit(143));
 	try {
 		user = await fApi.user.self();
 	} catch (err) {
-		console.log(`Unable to authenticate with floatplane... ${(<Error>err).message}\nPlease login to floatplane...`);
+		console.log(`Unable to authenticate with floatplane... ${(<Error>err).message}\nAttempting to re-authenticate...`);
 		user = await loginFloatplane();
 	}
 	await initProm(user!.id);
