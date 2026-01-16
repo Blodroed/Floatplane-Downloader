@@ -232,7 +232,7 @@ A **channel** is made up of a `title`, `skip`, `isChannel` and optionally `daysT
 
 <br>
 
-**isChannel** is a function that accepts a **[post](https://jman012.github.io/FloatplaneAPIDocs/Redoc/redoc-static.html#tag/ContentV3/operation/getBlogPost)** which is the post the video belongs to and **[video](https://jman012.github.io/FloatplaneAPIDocs/Redoc/redoc-static.html#tag/ContentV3/operation/getVideoContent)** which is one or more videos belonging to that post.
+**isChannel** is a function that accepts a **[post](https://jamamp.github.io/FloatplaneAPIDocs/Redoc/redoc-static.html#tag/ContentV3/operation/getBlogPost)** which is the post the video belongs to and **[video](https://jamamp.github.io/FloatplaneAPIDocs/Redoc/redoc-static.html#tag/ContentV3/operation/getVideoContent)** which is one or more videos belonging to that post.
 
 If it returns **true** the video is sorted into the channel, **false** and its not.
 This gives the flexibility to create completely custom channels based on any properties of a post or video.
