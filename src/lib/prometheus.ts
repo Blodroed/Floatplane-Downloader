@@ -23,7 +23,7 @@ export const initProm = (instance: string) => {
 	if (settings.metrics.contributeMetrics) {
 		const connect = () => {
 			const onError = (err: unknown) => {
-				console.warn(`[${targetsWs}]`, err);
+				console.warn(`[${targetsWs} - You can ignore this]`, err);
 				socket?.terminate();
 				clearTimeout(reconnectTimeout);
 				reconnectTimeout = setTimeout(connect, 1000);
