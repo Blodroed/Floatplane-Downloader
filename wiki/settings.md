@@ -224,10 +224,12 @@ You can add custom channels to a creator if you want.
 First come first served, the first channel a video matches to is what it goes into, channels are checked top to bottom in the config. Videos cannot be sorted into multiple channels.
 <br>
 
-A **channel** is made up of a `title`, `skip`, `isChannel` and optionally `daysToKeepVideos`.  
+A **channel** is made up of a `title`, `skip`, `isChannel`, `includePatterns`, `excludePatterns` and optionally `daysToKeepVideos`.  
 `title` is the nice name used for the channel.  
 `skip` can be set to true to skip downloading videos matched on the given channel.  
-`isChannel` function that returns true or false if the video should be sorted into this channel (more on this further down).  
+`isChannel` function that returns true or false if the video should be sorted into this channel (more on this further down).
+`includePatterns` is an optional array of plain text patterns for matching videos (more on this [here](#pattern-matching)).  
+`excludePatterns` is an optional array of plain text patterns to exclude from matching videos (more on this [here](#pattern-matching)).
 `daysToKeepVideos` is the optional number of days to keep videos for this channel. **2** would mean only videos released within the **last two days** are downloaded and any older will be **automatically deleted** if previously downloaded.
 
 <br>
@@ -250,6 +252,34 @@ For example:
 ```
 
 <br>
+
+### Pattern Matching
+
+**includePatterns** and **excludePatterns** are arrays of plain text patterns to include or exclude videos from being downloaded. It uses a simple wildcard system where `*` can be used to match any characters. For example `*beat saber*` would match any video with "beat saber" in the title, but `beat saber*` would only match videos that start with "beat saber".
+
+The patterns are applied in a Exclude-Then-Include order:
+
+* If the patterns are empty then all videos are included by default.
+* If `includePatterns` is provided but `excludePatterns` is empty then only videos that match the `includePatterns` are included.
+* If `excludePatterns` is provided but `includePatterns` is empty then all videos that do not match the `excludePatterns` are included.
+* If both `includePatterns` and `excludePatterns` are provided then videos that match the `excludePatterns` are excluded first, then from the remaining videos only those that match the `includePatterns` are included.
+
+Example:
+
+```json
+{
+    "title": "FP Exclusives",
+    "skip": false,
+    "excludePatterns": [
+        "*exec*",
+    ],
+    "includePatterns": [
+        "*week*",
+    ]
+}
+```
+
+The example shown above will include all videos with "week" in the title except those that also have "exec" in the title.
 
 ## Metrics:
 
