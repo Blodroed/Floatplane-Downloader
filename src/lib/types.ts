@@ -7,6 +7,8 @@ export type ChannelOptions = {
 	skip: boolean;
 	isChannel: string;
 	daysToKeepVideos?: number;
+	includePatterns?: string[];
+	excludePatterns?: string[];
 };
 
 export type Channels = ChannelOptions[];

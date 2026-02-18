@@ -9,6 +9,7 @@ import type { ChannelOptions, SubscriptionSettings } from "./types";
 import { Attachment } from "./Attachment";
 import { settings } from "./helpers/index";
 import { Video } from "./Video";
+import { compilePatterns, matchesPatterns, CompiledPatterns } from "./helpers/patternMatcher";
 
 const removeRepeatedSentences = (postTitle: string, attachmentTitle: string) => {
 	const separators = /(?:\s+|^)((?:[^.,;:!?-]+[\s]*[.,;:!?-]+)+)(?:\s+|$)/g;
@@ -28,11 +29,21 @@ export default class Subscription {
 	public readonly creatorId: string;
 	public readonly channels: SubscriptionSettings["channels"];
 	public readonly plan: string;
+	private compiledPatternsCache: Map<string, CompiledPatterns> = new Map();
 
 	constructor(subscription: SubscriptionSettings) {
 		this.creatorId = subscription.creatorId;
 		this.channels = subscription.channels;
 		this.plan = subscription.plan;
+
+		// Precompile patterns to cache
+		for (const channel of this.channels) {
+			const cacheKey = `${channel.title}`;
+			this.compiledPatternsCache.set(
+				cacheKey,
+				compilePatterns(channel.includePatterns, channel.excludePatterns)
+			)
+		}
 	}
 
 	public deleteOldVideos = async () => {
@@ -83,6 +94,10 @@ export default class Subscription {
 				if (!isChannel(post, video)) continue;
 				if (channel.skip) break;
 				if (channel.daysToKeepVideos !== undefined && new Date(post.releaseDate).getTime() < Subscription.getIgnoreBeforeTimestamp(channel)) return;
+
+				// Pattern match the video title if patterns are defined for the channel
+				const compiledPatterns = this.compiledPatternsCache.get(channel.title);
+				if (compiledPatterns !== undefined && !matchesPatterns(video.title, compiledPatterns)) continue;
 
 				// Remove the identifier from the video title if to give a nicer title
 				if (settings.extras.stripSubchannelPrefix === true) {
